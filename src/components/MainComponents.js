@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
@@ -12,6 +12,15 @@ import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
 import { PROMOTIONS } from '../shared/promotions';
 import { LEADERS } from '../shared/leaders';
+
+// ✅ Functional wrapper to handle URL param in v6
+const DishWithIdWrapper = ({ dishes, comments }) => {
+  const { dishId } = useParams();
+  const dish = dishes.find(d => d.id === parseInt(dishId, 10));
+  const filteredComments = comments.filter(c => c.dishId === parseInt(dishId, 10));
+
+  return <DishDetail dish={dish} comments={filteredComments} />;
+};
 
 class Main extends Component {
   constructor(props) {
@@ -28,9 +37,9 @@ class Main extends Component {
     const HomePage = () => {
       return (
         <Home
-          dish={this.state.dishes.filter((dish) => dish.featured)[0]}
-          promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
-          leader={this.state.leaders.filter((leader) => leader.featured)[0]}
+          dish={this.state.dishes.filter(dish => dish.featured)[0]}
+          promotion={this.state.promotions.filter(promo => promo.featured)[0]}
+          leader={this.state.leaders.filter(leader => leader.featured)[0]}
         />
       );
     };
@@ -41,16 +50,12 @@ class Main extends Component {
 
         <Routes>
           <Route path="/home" element={<HomePage />} />
+          <Route path="/menu" element={<Menu dishes={this.state.dishes} />} />
           <Route
-            path="/menu"
-            element={
-              <Menu
-                dishes={this.state.dishes}
-              />
-            }
+            path="/menu/:dishId"
+            element={<DishWithIdWrapper dishes={this.state.dishes} comments={this.state.comments} />}
           />
           <Route path="/contactus" element={<Contact />} />
-          {/* You can add the DishDetail route when you're ready */}
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
 
