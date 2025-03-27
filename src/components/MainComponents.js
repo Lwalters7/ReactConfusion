@@ -1,53 +1,56 @@
 import React, { Component } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom'; // ✅ use v6 syntax
+import { Routes, Route, Navigate } from 'react-router-dom';
+
+import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
+import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-import Home from './HomeComponent';
+
 import { DISHES } from '../shared/dishes';
+import { COMMENTS } from '../shared/comments';
+import { PROMOTIONS } from '../shared/promotions';
+import { LEADERS } from '../shared/leaders';
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dishes: DISHES,
-      selectedDish: null
+      comments: COMMENTS,
+      promotions: PROMOTIONS,
+      leaders: LEADERS
     };
   }
 
-  onDishSelect(dishId) {
-    this.setState({ selectedDish: dishId });
-  }
-
   render() {
+    const HomePage = () => {
+      return (
+        <Home
+          dish={this.state.dishes.filter((dish) => dish.featured)[0]}
+          promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
+          leader={this.state.leaders.filter((leader) => leader.featured)[0]}
+        />
+      );
+    };
+
     return (
       <div>
         <Header />
 
-        {/* ✅ Routing setup with Routes and Route (v6) */}
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<HomePage />} />
           <Route
             path="/menu"
             element={
               <Menu
                 dishes={this.state.dishes}
-                onClick={(dishId) => this.onDishSelect(dishId)}
               />
             }
           />
-          <Route
-            path="/menu/:dishId"
-            element={
-              <DishDetail
-                dish={this.state.dishes.filter(
-                  (dish) => dish.id === this.state.selectedDish
-                )[0]}
-              />
-            }
-          />
-          {/* Redirect any unmatched routes to /home */}
+          <Route path="/contactus" element={<Contact />} />
+          {/* You can add the DishDetail route when you're ready */}
           <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
 
