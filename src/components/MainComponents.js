@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
+import { Routes, Route, Navigate } from 'react-router-dom'; // ✅ use v6 syntax
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
-import Header from './HeaderComponent';  // ✅ Add this
-import Footer from './FooterComponent';  // ✅ Add this
+import Header from './HeaderComponent';
+import Footer from './FooterComponent';
+import Home from './HomeComponent';
 import { DISHES } from '../shared/dishes';
 
 class Main extends Component {
@@ -22,20 +23,35 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Header /> {/* ✅ Render the Header */}
+        <Header />
 
-        <Menu
-          dishes={this.state.dishes}
-          onClick={(dishId) => this.onDishSelect(dishId)}
-        />
+        {/* ✅ Routing setup with Routes and Route (v6) */}
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route
+            path="/menu"
+            element={
+              <Menu
+                dishes={this.state.dishes}
+                onClick={(dishId) => this.onDishSelect(dishId)}
+              />
+            }
+          />
+          <Route
+            path="/menu/:dishId"
+            element={
+              <DishDetail
+                dish={this.state.dishes.filter(
+                  (dish) => dish.id === this.state.selectedDish
+                )[0]}
+              />
+            }
+          />
+          {/* Redirect any unmatched routes to /home */}
+          <Route path="*" element={<Navigate to="/home" />} />
+        </Routes>
 
-        <DishDetail
-          dish={this.state.dishes.filter(
-            (dish) => dish.id === this.state.selectedDish
-          )[0]}
-        />
-
-        <Footer /> {/* ✅ Render the Footer */}
+        <Footer />
       </div>
     );
   }
