@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
+import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
+import { Loading } from './LoadingComponent';
 import CommentForm from './CommentFormComponent';
-import {
-  Card,
-  CardImg,
-  CardBody,
-  CardTitle,
-  CardText
-} from 'reactstrap';
 
 class DishDetail extends Component {
-  // ✅ Render dish card using a reusable function
   renderDish(dish) {
     if (!dish) return <div></div>;
 
@@ -56,21 +50,46 @@ renderComments(comments, addComment, dishId) {
   
 
 render() {
-  const { dish, comments, addComment } = this.props;
+  const { dish, comments, addComment, isLoading, errMess } = this.props;
 
-  if (!dish) return <div></div>;
+  if (isLoading) {
+    return (
+      <div className="container">
+        <div className="row">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (errMess) {
+    return (
+      <div className="container">
+        <div className="row">
+          <h4>{errMess}</h4>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dish) {
+    return <div></div>;
+  }
 
   return (
-    <div className="row">
-      <div className="col-12 col-md-5 m-1">
-        {this.renderDish(dish)}
-      </div>
-      <div className="col-12 col-md-5 m-1">
-        {this.renderComments(comments, addComment, dish.id)}
+    <div className="container">
+      <div className="row">
+        <div className="col-12 col-md-5 m-1">
+          {this.renderDish(dish)}
+        </div>
+        <div className="col-12 col-md-5 m-1">
+          {this.renderComments(comments, addComment, dish.id)}
+        </div>
       </div>
     </div>
   );
 }
+
   
 }
 

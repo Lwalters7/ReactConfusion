@@ -7,19 +7,30 @@ import {
   CardTitle,
   CardSubtitle
 } from 'reactstrap';
+import { Loading } from './LoadingComponent';
 
-function RenderCard({ item }) {
-  return (
-    <Card>
-      <CardImg src={item.image} alt={item.name} />
-      <CardBody>
-        <CardTitle>{item.name}</CardTitle>
-        {item.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null}
-        <CardText>{item.description}</CardText>
-      </CardBody>
-    </Card>
-  );
+
+function RenderCard({ item, isLoading, errMess }) {
+  if (isLoading) {
+    return <h4>Loading...</h4>;
+  } else if (errMess) {
+    return <h4>{errMess}</h4>;
+  } else if (item) {
+    return (
+      <Card>
+        <CardImg src={item.image} alt={item.name} />
+        <CardBody>
+          <CardTitle>{item.name}</CardTitle>
+          {item.designation ? <CardSubtitle>{item.designation}</CardSubtitle> : null}
+          <CardText>{item.description}</CardText>
+        </CardBody>
+      </Card>
+    );
+  } else {
+    return <div></div>; 
+  }
 }
+
 
 function Home(props) {
   return (
