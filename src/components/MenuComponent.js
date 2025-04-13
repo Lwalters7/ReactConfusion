@@ -8,6 +8,7 @@ import {
   CardText
 } from 'reactstrap';
 import { Loading } from './LoadingComponent';
+import DishDetail from './DishdetailComponent';
 
 function RenderMenuItem({ dish, onClick }) {
   return (
@@ -34,7 +35,6 @@ function Menu(props) {
     );
   }
 
-  // ✅ Handle error state
   if (errMess) {
     return (
       <div className="container">
@@ -58,37 +58,12 @@ function Menu(props) {
       <div className="row">{menu}</div>
 
       {selectedDish && (
-        <div className="row mt-4">
-          <div className="col-12 col-md-6">
-            <Card>
-              <CardImg top src={selectedDish.image} alt={selectedDish.name} />
-              <CardBody>
-                <CardTitle>{selectedDish.name}</CardTitle>
-                <CardText>{selectedDish.description}</CardText>
-              </CardBody>
-            </Card>
-          </div>
-          <div className="col-12 col-md-6">
-            <h4>Comments</h4>
-            <ul className="list-unstyled">
-              {props.comments
-                .filter((c) => c.dishId === selectedDish.id)
-                .map((comment) => (
-                  <li key={comment.id}>
-                    <p>{comment.comment}</p>
-                    <p>
-                      -- {comment.author},{' '}
-                      {new Intl.DateTimeFormat('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: '2-digit'
-                      }).format(new Date(comment.date))}
-                    </p>
-                  </li>
-                ))}
-            </ul>
-          </div>
-        </div>
+        <DishDetail
+        dish={selectedDish}
+        comments={props.comments.filter((c) => c.dishId === selectedDish.id)}
+        addComment={props.addComment}
+        resetFeedbackForm={props.resetFeedbackForm}
+      />
       )}
     </div>
   );

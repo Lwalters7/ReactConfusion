@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { actions } from 'react-redux-form';
 
 import { addComment, fetchDishes } from '../redux/ActionCreators';
 
@@ -38,8 +39,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addComment: (dishId, rating, author, comment) =>
-    dispatch(addComment(dishId, rating, author, comment)),
-  fetchDishes: () => dispatch(fetchDishes())
+  dispatch(addComment(dishId, rating, author, comment)),
+  fetchDishes: () => dispatch(fetchDishes()),
+  resetFeedbackForm: () => dispatch(actions.reset('feedback')) 
 });
 
 class Main extends Component {
@@ -87,8 +89,11 @@ class Main extends Component {
                 />
               }
             />
-            <Route path="/contactus" element={<Contact />} />
-            <Route path="*" element={<Navigate to="/home" />} />
+                <Route
+                  path="/contactus"
+                  element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />}
+                />            
+                <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
         </div>
         <Footer />
