@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Routes, Route, Navigate, useParams, withRouter } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
+
+import { addComment } from '../redux/ActionCreators';
 
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
@@ -9,12 +11,18 @@ import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 
-const DishWithIdWrapper = ({ dishes, comments }) => {
+const DishWithIdWrapper = ({ dishes, comments, addComment }) => {
   const { dishId } = useParams();
   const dish = dishes.find(d => d.id === parseInt(dishId, 10));
   const filteredComments = comments.filter(c => c.dishId === parseInt(dishId, 10));
 
-  return <DishDetail dish={dish} comments={filteredComments} />;
+  return (
+    <DishDetail
+      dish={dish}
+      comments={filteredComments}
+      addComment={addComment}
+    />
+  );
 };
 
 const mapStateToProps = state => {
@@ -25,6 +33,11 @@ const mapStateToProps = state => {
     leaders: state.leaders
   };
 };
+
+const mapDispatchToProps = dispatch => ({
+  addComment: (dishId, rating, author, comment) =>
+    dispatch(addComment(dishId, rating, author, comment))
+});
 
 class Main extends Component {
   render() {
@@ -42,16 +55,22 @@ class Main extends Component {
       <div>
         <Header />
         <div>
-        <Routes>
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/menu" element={<Menu dishes={this.props.dishes} />} />
-          <Route
-            path="/menu/:dishId"
-            element={<DishWithIdWrapper dishes={this.props.dishes} comments={this.props.comments} />}
-          />
-          <Route path="/contactus" element={<Contact />} />
-          <Route path="*" element={<Navigate to="/home" />} />
-        </Routes>
+          <Routes>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/menu" element={<Menu dishes={this.props.dishes} />} />
+            <Route
+              path="/menu/:dishId"
+              element={
+                <DishWithIdWrapper
+                  dishes={this.props.dishes}
+                  comments={this.props.comments}
+                  addComment={this.props.addComment}
+                />
+              }
+            />
+            <Route path="/contactus" element={<Contact />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </Routes>
         </div>
         <Footer />
       </div>
@@ -59,4 +78,4 @@ class Main extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
