@@ -10,6 +10,7 @@ import { Leaders } from './leaders';
 import { createForms } from 'react-redux-form';
 import { InitialFeedback } from './forms'; 
 
+
 export const ConfigureStore = () => {
   const store = createStore(
     combineReducers({

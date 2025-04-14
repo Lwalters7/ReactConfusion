@@ -12,21 +12,22 @@ import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
 
-const DishWithIdWrapper = ({ dishes, isLoading, errMess, comments, addComment }) => {
+function DishWithIdWrapperWrapper(props) {
   const { dishId } = useParams();
-  const dish = dishes.find(d => d.id === parseInt(dishId, 10));
-  const filteredComments = comments.filter(c => c.dishId === parseInt(dishId, 10));
+  const dish = props.dishes.dishes.find(d => d.id === parseInt(dishId, 10));
+  const filteredComments = props.comments.filter(c => c.dishId === parseInt(dishId, 10));
 
   return (
     <DishDetail
       dish={dish}
-      isLoading={isLoading}
-      errMess={errMess}
+      isLoading={props.dishes.isLoading}
+      errMess={props.dishes.errMess}
       comments={filteredComments}
-      addComment={addComment}
+      addComment={props.addComment}     
+      resetFeedbackForm={props.resetFeedbackForm} 
     />
   );
-};
+}
 
 const mapStateToProps = state => {
   return {
@@ -39,7 +40,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addComment: (dishId, rating, author, comment) =>
-  dispatch(addComment(dishId, rating, author, comment)),
+    dispatch(addComment(dishId, rating, author, comment)),
   fetchDishes: () => dispatch(fetchDishes()),
   resetFeedbackForm: () => dispatch(actions.reset('feedback')) 
 });
@@ -69,31 +70,24 @@ class Main extends Component {
           <Routes>
             <Route path="/home" element={<HomePage />} />
             <Route
-  path="/menu"
-  element={
-    <Menu
-      dishes={this.props.dishes}
-      comments={this.props.comments}
-    />
-  }
-/>
-            <Route
-              path="/menu/:dishId"
+              path="/menu"
               element={
-                <DishWithIdWrapper
-                  dishes={this.props.dishes.dishes}
-                  isLoading={this.props.dishes.isLoading}
-                  errMess={this.props.dishes.errMess}
+                <Menu
+                  dishes={this.props.dishes}
                   comments={this.props.comments}
                   addComment={this.props.addComment}
                 />
               }
             />
-                <Route
-                  path="/contactus"
-                  element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />}
-                />            
-                <Route path="*" element={<Navigate to="/home" />} />
+            <Route
+              path="/menu/:dishId"
+              element={<DishWithIdWrapperWrapper {...this.props} />}
+            />
+            <Route
+              path="/contactus"
+              element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />}
+            />
+            <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
         </div>
         <Footer />

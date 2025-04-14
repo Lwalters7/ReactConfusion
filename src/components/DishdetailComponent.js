@@ -50,6 +50,7 @@ renderComments(comments, addComment, dishId) {
   
 
 render() {
+  console.log("🤖 DishDetail props:", this.props);
   const { dish, comments, addComment, isLoading, errMess } = this.props;
 
   if (isLoading) {
