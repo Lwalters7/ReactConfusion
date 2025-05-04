@@ -9,11 +9,12 @@ import {
 } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import DishDetail from './DishdetailComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 function RenderMenuItem({ dish, onClick }) {
   return (
     <Card onClick={() => onClick(dish)}>
-      <CardImg width="100%" src={dish.image} alt={dish.name} />
+      <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
       <CardImgOverlay>
         <CardTitle>{dish.name}</CardTitle>
       </CardImgOverlay>

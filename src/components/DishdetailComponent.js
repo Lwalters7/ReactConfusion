@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
 import { Loading } from './LoadingComponent';
 import CommentForm from './CommentFormComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 class DishDetail extends Component {
   renderDish(dish) {
@@ -9,7 +10,7 @@ class DishDetail extends Component {
 
     return (
       <Card>
-        <CardImg top src={dish.image} alt={dish.name} />
+        <CardImg top src={baseUrl + dish.image} alt={dish.name} />
         <CardBody>
           <CardTitle>{dish.name}</CardTitle>
           <CardText>{dish.description}</CardText>
