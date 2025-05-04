@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
 
-import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 
 import Home from './HomeComponent';
 import Menu from './MenuComponent';
@@ -23,7 +23,7 @@ function DishWithIdWrapperWrapper(props) {
       isLoading={props.dishes.isLoading}
       errMess={props.dishes.errMess}
       comments={filteredComments}
-      addComment={props.addComment}     
+      postComment={this.props.postComment}
       resetFeedbackForm={props.resetFeedbackForm} 
     />
   );
@@ -39,8 +39,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  addComment: (dishId, rating, author, comment) =>
-  dispatch(addComment(dishId, rating, author, comment)),
+  postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
   fetchDishes: () => dispatch(fetchDishes()),
   fetchComments: () => dispatch(fetchComments()),
   fetchPromos: () => dispatch(fetchPromos()),

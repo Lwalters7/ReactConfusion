@@ -60,11 +60,13 @@ function Menu(props) {
 
       {selectedDish && (
         <DishDetail
-        dish={selectedDish}
-        comments={props.comments.filter((c) => c.dishId === selectedDish.id)}
-        addComment={props.addComment}
-        resetFeedbackForm={props.resetFeedbackForm}
-      />
+          dish={selectedDish}
+          comments={props.comments.comments.filter(
+            (c) => c.dishId === selectedDish.id
+          )}
+          postComment={props.postComment}
+          resetFeedbackForm={props.resetFeedbackForm}
+        />
       )}
     </div>
   );
