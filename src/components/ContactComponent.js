@@ -71,9 +71,19 @@ class Contact extends Component {
   }
 
   handleSubmit(event) {
-    console.log('Current State is: ' + JSON.stringify(this.state));
-    alert('Current State is: ' + JSON.stringify(this.state));
-    event.preventDefault();
+    event.preventDefault(); // prevent default first
+    const feedback = {
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
+      telnum: this.state.telnum,
+      email: this.state.email,
+      agree: this.state.agree,
+      contactType: this.state.contactType,
+      message: this.state.message
+    };
+  
+    this.props.postFeedback(feedback);  // Dispatch action to post to server
+    alert('Thank you for your feedback!\n' + JSON.stringify(feedback));
   }
 
   render() {
